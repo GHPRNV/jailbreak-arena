@@ -77,6 +77,7 @@ python -m pip install --quiet --no-cache-dir uv
 python -m uv pip install --system --no-cache \
     "trl>=0.13.0" "transformers>=4.45" "datasets>=2.20" \
     "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25" \
+    "jmespath>=1.0.1" \
     "openenv-core[core]>=0.2.2" "fastapi>=0.115" "pydantic>=2" \
     "uvicorn>=0.24" "fastmcp>=0.1" "pytest>=8"
 python -m uv pip install --system --no-cache --no-deps -e .
