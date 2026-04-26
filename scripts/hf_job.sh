@@ -57,6 +57,7 @@ python -m pytest tests/test_rubric.py -q --no-header
 echo "::endgroup::"
 
 echo "::group::Train"
+mkdir -p outputs
 python scripts/train_grpo_defender.py \
     --model-id "$MODEL_ID" \
     --dataset-size "$DATASET_SIZE" \
@@ -68,7 +69,6 @@ python scripts/train_grpo_defender.py \
     --max-turns "$MAX_TURNS" \
     --output-dir outputs/run0 \
     --plots-dir plots \
-    --push-to-hub \
     2>&1 | tee outputs/train.log
 echo "::endgroup::"
 
