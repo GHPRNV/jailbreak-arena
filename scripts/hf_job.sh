@@ -66,22 +66,26 @@ else
 fi
 
 echo "::group::pip install (uv-powered, no vllm)"
-# - Base image has torch 2.4, but trl 0.14+ (GRPO) imports FSDPModule from
-#   torch.distributed.fsdp, which is only available in torch>=2.5.
-# - We do NOT install trl[vllm] (huge, and can SIGKILL the job); GRPO is fine
-#   with --vllm-mode off and plain HF generate.
+# - trl 1.2+ imports FSDPModule from torch.distributed.fsdp; the conda image
+#   only ships torch 2.4 (no FSDPModule). trl/uv can also re-resolve to 2.4.
+# - Install Python deps first, then *force* torch+vision+audio from the
+#   official cu124 wheel index so GRPO can import. No trl[vllm] (huge; GRPO
+#   works with --vllm-mode off).
 heartbeat &
 HB=$!
 python -m pip install --quiet --no-cache-dir uv
-python -m uv pip install --system --no-cache --upgrade \
-    "torch==2.5.1" "torchvision==0.20.1" "torchaudio==2.5.1" \
-    --index-url https://download.pytorch.org/whl/cu124
 python -m uv pip install --system --no-cache \
     "trl>=0.13.0" "transformers>=4.45" "datasets>=2.20" \
     "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25" \
     "openenv-core[core]>=0.2.2" "fastapi>=0.115" "pydantic>=2" \
     "uvicorn>=0.24" "fastmcp>=0.1" "pytest>=8"
 python -m uv pip install --system --no-cache --no-deps -e .
+# Must run last: overrides conda's torch if uv pulled an older one.
+python -m pip install --upgrade --force-reinstall --no-cache-dir \
+    "torch" "torchvision" "torchaudio" \
+    --index-url https://download.pytorch.org/whl/cu124
+python -c "import torch; from torch.distributed.fsdp import FSDPModule; \
+    print('[hf_job] torch', torch.__version__, 'FSDPModule OK')"
 kill "$HB" 2>/dev/null || true
 echo "::endgroup::"
 
