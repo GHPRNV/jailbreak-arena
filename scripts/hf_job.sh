@@ -15,7 +15,8 @@
 # live Space's README shows the real training curves, and the trained model is
 # pushed to the Hugging Face Hub.
 
-set -euo pipefail
+set -eo pipefail
+trap 'rc=$?; echo "[hf_job] FAILED rc=$rc at line $LINENO. cmd: ${BASH_COMMAND}" >&2' ERR
 
 # -------- Tunables ---------------------------------------------------------- #
 GIT_REPO="${GIT_REPO:-https://github.com/GHPRNV/jailbreak-arena}"
@@ -36,7 +37,9 @@ MAX_TURNS="${MAX_TURNS:-3}"
 echo "::group::Environment"
 nvidia-smi || echo "(no GPU?)"
 python --version
-pip --version
+python -m pip --version
+df -h /
+free -h
 echo "::endgroup::"
 
 WORKDIR="${WORKDIR:-/workspace/jailbreak-arena}"
@@ -45,10 +48,10 @@ git clone --depth 1 --branch "$GIT_BRANCH" "$GIT_REPO" "$WORKDIR"
 cd "$WORKDIR"
 
 echo "::group::pip install"
-# Pin torch=2.4 + cu124 so vllm wheel matches; install jb-arena, trl[vllm].
-pip install --upgrade pip
-pip install --no-cache-dir -e .
-pip install --no-cache-dir "trl[vllm]>=0.13.0" "transformers>=4.45" \
+# Conda's pip is fine; we don't need to upgrade it here. torch + cu124 are
+# already in the base image, so vllm's wheel will match.
+python -m pip install --no-cache-dir -e .
+python -m pip install --no-cache-dir "trl[vllm]>=0.13.0" "transformers>=4.45" \
     "datasets>=2.20" "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25"
 echo "::endgroup::"
 
