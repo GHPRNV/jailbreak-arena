@@ -45,12 +45,12 @@ train = [
     "trackio>=0.1.0",
     "matplotlib>=3.7.0",
     "pandas>=2.0.0",
-    "numpy>=1.24.0",
+    "numpy<2.0.0",
 ]
 
 [project.urls]
-Homepage = "https://huggingface.co/spaces/openenv-jailbreak-arena/jailbreak-arena"
-Repository = "https://github.com/openenv-jailbreak-arena/jailbreak-arena"
+Homepage = "https://huggingface.co/spaces/M134pra/jailbreak-arena"
+Repository = "https://github.com/GHPRNV/jailbreak-arena"
 
 [project.scripts]
 server = "jailbreak_arena.server.app:main"
