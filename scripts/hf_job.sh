@@ -65,20 +65,19 @@ else
     cd "$WORKDIR"
 fi
 
-echo "::group::pip install (uv-powered)"
-# Use uv for deps: ~10x faster than pip and prints continuously, which keeps
-# the HF Jobs log heartbeat happy during dependency resolution.
+echo "::group::pip install (uv-powered, no vllm)"
+# uv is ~10x faster than pip and prints continuously => HF Jobs log heartbeat
+# stays alive during resolution. We deliberately DO NOT install vllm here:
+# trl[vllm] upgrades torch 2.4 -> 2.10 which conflicts with the base image's
+# pre-built CUDA stack and SIGKILLs the container at `import torch`.
 heartbeat &
 HB=$!
 python -m pip install --quiet --no-cache-dir uv
-# Resolve+install all heavy deps with uv in one shot. torch + cu124 are
-# already provided by the base image, so vllm's wheel matches.
 python -m uv pip install --system --no-cache \
-    "trl[vllm]>=0.13.0" "transformers>=4.45" "datasets>=2.20" \
+    "trl>=0.13.0" "transformers>=4.45" "datasets>=2.20" \
     "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25" \
     "openenv-core[core]>=0.2.2" "fastapi>=0.115" "pydantic>=2" \
     "uvicorn>=0.24" "fastmcp>=0.1" "pytest>=8"
-# Now install our package without pulling deps (already satisfied above).
 python -m uv pip install --system --no-cache --no-deps -e .
 kill "$HB" 2>/dev/null || true
 echo "::endgroup::"
@@ -98,6 +97,7 @@ python scripts/train_grpo_defender.py \
     --gradient-accumulation-steps "$GRAD_ACCUM" \
     --learning-rate "$LEARNING_RATE" \
     --max-turns "$MAX_TURNS" \
+    --vllm-mode off \
     --output-dir outputs/run0 \
     --plots-dir plots \
     2>&1 | tee outputs/run0/train.log
