@@ -185,15 +185,28 @@ with JailbreakArenaEnv(base_url="https://M134pra-jailbreak-arena.hf.space").sync
 
 ## Train your own Defender
 
+Three paths, in increasing order of speed and cost:
+
+1. **HF Jobs (recommended, ~25min, ~$0.65)** — full guide in [`docs/TRAINING_HF_JOBS.md`](docs/TRAINING_HF_JOBS.md). One-liner:
+
 ```bash
-# In-process training — fastest. Recommended for Colab T4.
+hf jobs run --flavor a10g-large --secrets HF_TOKEN \
+    pytorch/pytorch:2.4.0-cuda12.4-cudnn9-runtime \
+    bash -c "curl -sL https://raw.githubusercontent.com/GHPRNV/jailbreak-arena/main/scripts/hf_job.sh | bash"
+```
+
+This runs training, generates real plots, pushes the trained model to the Hub, and uploads the new plots BACK to the Space — fully end-to-end.
+
+2. **Free Colab T4** — open [`notebooks/train_grpo_colab.ipynb`](notebooks/train_grpo_colab.ipynb), Run All, ~45 min.
+
+3. **Local Python** (any machine with a CUDA GPU):
+
+```bash
 python scripts/train_grpo_defender.py \
     --model-id Qwen/Qwen2.5-0.5B-Instruct \
     --dataset-size 600 --max-turns 3 \
+    --self-play-pool-size 32 \
     --output-dir outputs/run0 --plots-dir plots/
-
-# Or via the Colab notebook (recommended):
-#   notebooks/train_grpo_colab.ipynb
 ```
 
 The script (and notebook) automatically:
