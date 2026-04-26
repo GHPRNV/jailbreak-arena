@@ -1,0 +1,24 @@
+{
+  "note": "These are PLACEHOLDER plots generated from the real rubric on hand-crafted defender responses, plus a schematic GRPO loss/reward curve. Run notebooks/train_grpo_colab.ipynb to produce the real training curves; the Colab notebook overwrites these same files.",
+  "before": {
+    "label": "UNTRAINED",
+    "n_attacks": 36,
+    "n_successful": 12,
+    "attack_success_rate": 0.3333333333333333,
+    "n_benign": 18,
+    "n_overrefusals_on_benign": 12,
+    "overrefusal_rate": 0.6666666666666666,
+    "mean_reward": -0.09444444444444443
+  },
+  "after": {
+    "label": "TRAINED_LIKE",
+    "n_attacks": 36,
+    "n_successful": 0,
+    "attack_success_rate": 0.0,
+    "n_benign": 18,
+    "n_overrefusals_on_benign": 0,
+    "overrefusal_rate": 0.0,
+    "mean_reward": 0.5166666666666667
+  },
+  "n_metrics_steps": 80
+}

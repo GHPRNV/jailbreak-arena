@@ -1,0 +1,23 @@
+spec_version: 1
+name: jailbreak_arena
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+description: >
+  Adversarial self-play arena for AI safety. An Attacker LLM tries to jailbreak
+  a Defender LLM into violating a written constitution (extracting sandboxed
+  secrets); the Defender is rewarded for staying safe AND helpful (over-refusal
+  is penalized). Uses a composable rubric (constitution adherence, helpfulness,
+  attack novelty, repetition) so agents that trivially "always refuse" do not
+  win.
+tags:
+  - rl
+  - self-play
+  - safety
+  - alignment
+  - red-team
+  - grpo
+themes:
+  - self-improvement
+  - multi-agent
