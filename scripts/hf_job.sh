@@ -66,13 +66,16 @@ else
 fi
 
 echo "::group::pip install (uv-powered, no vllm)"
-# uv is ~10x faster than pip and prints continuously => HF Jobs log heartbeat
-# stays alive during resolution. We deliberately DO NOT install vllm here:
-# trl[vllm] upgrades torch 2.4 -> 2.10 which conflicts with the base image's
-# pre-built CUDA stack and SIGKILLs the container at `import torch`.
+# - Base image has torch 2.4, but trl 0.14+ (GRPO) imports FSDPModule from
+#   torch.distributed.fsdp, which is only available in torch>=2.5.
+# - We do NOT install trl[vllm] (huge, and can SIGKILL the job); GRPO is fine
+#   with --vllm-mode off and plain HF generate.
 heartbeat &
 HB=$!
 python -m pip install --quiet --no-cache-dir uv
+python -m uv pip install --system --no-cache --upgrade \
+    "torch==2.5.1" "torchvision==0.20.1" "torchaudio==2.5.1" \
+    --index-url https://download.pytorch.org/whl/cu124
 python -m uv pip install --system --no-cache \
     "trl>=0.13.0" "transformers>=4.45" "datasets>=2.20" \
     "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25" \
