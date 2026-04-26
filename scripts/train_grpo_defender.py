@@ -194,12 +194,6 @@ class InProcessDefenderEnv(DefenderEnvBase):
         if self._extra_attacks:
             self._templates = self._templates + self._extra_attacks
 
-        # Direct shortcut to the Python tools (bypassing MCP's serialization
-        # cost — this is the primary speed win of the in-process mode).
-        self._tools = {
-            t.name: t for t in self._env._mcp.list_tools_sync()  # type: ignore[attr-defined]
-        }
-
     def _call(self, name: str, **kwargs: Any) -> Any:
         from openenv.core.env_server.mcp_types import CallToolAction
         obs = self._env.step(CallToolAction(tool_name=name, arguments=kwargs))
