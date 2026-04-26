@@ -57,7 +57,7 @@ python -m pytest tests/test_rubric.py -q --no-header
 echo "::endgroup::"
 
 echo "::group::Train"
-mkdir -p outputs
+mkdir -p outputs/run0
 python scripts/train_grpo_defender.py \
     --model-id "$MODEL_ID" \
     --dataset-size "$DATASET_SIZE" \
@@ -69,7 +69,7 @@ python scripts/train_grpo_defender.py \
     --max-turns "$MAX_TURNS" \
     --output-dir outputs/run0 \
     --plots-dir plots \
-    2>&1 | tee outputs/train.log
+    2>&1 | tee outputs/run0/train.log
 echo "::endgroup::"
 
 echo "::group::Upload trained model to Hub"

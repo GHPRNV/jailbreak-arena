@@ -70,7 +70,7 @@ def main() -> int:
                 repo_id=args.space_repo,
                 repo_type="space",
                 commit_message=args.commit_message + " (training summary)",
-                allow_patterns=["*.json", "summary.txt", "README.md"],
+                allow_patterns=["*.json", "*.txt", "*.log", "*.md"],
             )
 
     summary_path = plots_dir / "eval_summary.json"
