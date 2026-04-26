@@ -16,7 +16,20 @@
 # pushed to the Hugging Face Hub.
 
 set -eo pipefail
-trap 'rc=$?; echo "[hf_job] FAILED rc=$rc at line $LINENO. cmd: ${BASH_COMMAND}" >&2' ERR
+exec 2>&1
+trap 'rc=$?; echo "[hf_job] EXIT rc=$rc at line $LINENO"' EXIT
+trap 'rc=$?; echo "[hf_job] ERR  rc=$rc at line $LINENO. cmd: ${BASH_COMMAND}"' ERR
+trap 'echo "[hf_job] SIGTERM received"; exit 143' TERM
+trap 'echo "[hf_job] SIGINT received"; exit 130' INT
+
+# Helper: run a long pip command with a heartbeat so HF Jobs never thinks
+# we're hung during silent dependency resolution.
+heartbeat() {
+    while true; do
+        echo "[heartbeat] $(date -Iseconds) still working..."
+        sleep 10
+    done
+}
 
 # -------- Tunables ---------------------------------------------------------- #
 GIT_REPO="${GIT_REPO:-https://github.com/GHPRNV/jailbreak-arena}"
@@ -52,12 +65,22 @@ else
     cd "$WORKDIR"
 fi
 
-echo "::group::pip install"
-# Conda's pip is fine; we don't need to upgrade it here. torch + cu124 are
-# already in the base image, so vllm's wheel will match.
-python -m pip install --no-cache-dir -e .
-python -m pip install --no-cache-dir "trl[vllm]>=0.13.0" "transformers>=4.45" \
-    "datasets>=2.20" "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25"
+echo "::group::pip install (uv-powered)"
+# Use uv for deps: ~10x faster than pip and prints continuously, which keeps
+# the HF Jobs log heartbeat happy during dependency resolution.
+heartbeat &
+HB=$!
+python -m pip install --quiet --no-cache-dir uv
+# Resolve+install all heavy deps with uv in one shot. torch + cu124 are
+# already provided by the base image, so vllm's wheel matches.
+python -m uv pip install --system --no-cache \
+    "trl[vllm]>=0.13.0" "transformers>=4.45" "datasets>=2.20" \
+    "accelerate>=0.34" "matplotlib" "huggingface_hub>=0.25" \
+    "openenv-core[core]>=0.2.2" "fastapi>=0.115" "pydantic>=2" \
+    "uvicorn>=0.24" "fastmcp>=0.1" "pytest>=8"
+# Now install our package without pulling deps (already satisfied above).
+python -m uv pip install --system --no-cache --no-deps -e .
+kill "$HB" 2>/dev/null || true
 echo "::endgroup::"
 
 echo "::group::Sanity check (rubric tests, no GPU needed)"
