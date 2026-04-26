@@ -43,9 +43,14 @@ free -h
 echo "::endgroup::"
 
 WORKDIR="${WORKDIR:-/workspace/jailbreak-arena}"
-rm -rf "$WORKDIR"
-git clone --depth 1 --branch "$GIT_BRANCH" "$GIT_REPO" "$WORKDIR"
-cd "$WORKDIR"
+if [ -d "$WORKDIR/.git" ]; then
+    echo "[hf_job] reusing existing clone at $WORKDIR"
+    cd "$WORKDIR"
+else
+    rm -rf "$WORKDIR"
+    git clone --depth 1 --branch "$GIT_BRANCH" "$GIT_REPO" "$WORKDIR"
+    cd "$WORKDIR"
+fi
 
 echo "::group::pip install"
 # Conda's pip is fine; we don't need to upgrade it here. torch + cu124 are
