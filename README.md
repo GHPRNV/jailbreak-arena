@@ -31,7 +31,6 @@ tags:
 | 🤗 **Hugging Face Space**  | https://huggingface.co/spaces/M134pra/jailbreak-arena                                          |
 | 💻 **Code repository**     | https://github.com/GHPRNV/jailbreak-arena                                                      |
 | 📝 **HF blog writeup**     | [`docs/BLOG.md`](docs/BLOG.md)                                                                       |
-| 🎥 **YouTube video**       | https://youtu.be/YOUR_VIDEO_ID  (script: [`docs/VIDEO_SCRIPT.md`](docs/VIDEO_SCRIPT.md))            |
 
 ```text
 Deck themes hit:   Self-Improvement (self-play)   ✓
