@@ -130,27 +130,6 @@ The notebook and script both run:
 - GRPO optimization,
 - after-training held-out evaluation,
 - plot generation and JSON summaries.
-
-## Results
-
-Main comparison chart:
-
-![Before vs after](../plots/before_after_demo.png)
-
-Training curves:
-
-| Loss | Reward |
-|---|---|
-| ![Loss](../plots/loss.png) | ![Reward](../plots/reward.png) |
-
-Held-out attack success:
-
-![Attack success](../plots/attack_success_rate.png)
-
-Important note for reviewers:
-
-- If you see placeholder-style charts in a fork, run the training notebook once and the files in plots/ are replaced with real run outputs.
-
 ## Reproduce in one click
 
 <details>
