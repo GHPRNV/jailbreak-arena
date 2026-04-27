@@ -19,10 +19,6 @@ tags:
 
 > Two LLMs co-evolve in a sandboxed Constitutional CTF: an **Attacker** tries to jailbreak a **Defender** into violating a written constitution; the Defender learns to stay safe **and** helpful. Same model, two roles, **GRPO self-play**.
 
-[![OpenEnv](https://img.shields.io/badge/OpenEnv-environment-blueviolet)](https://github.com/meta-pytorch/OpenEnv)
-[![Open Quick Demo In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/GHPRNV/jailbreak-arena/blob/main/notebooks/env_demo.ipynb)
-[![Open Training In Colab](https://img.shields.io/badge/Train%20in%20Colab-T4%20GPU-orange)](https://colab.research.google.com/github/GHPRNV/jailbreak-arena/blob/main/notebooks/train_grpo_colab.ipynb)
-[![HF Space](https://img.shields.io/badge/%F0%9F%A4%97%20HF%20Space-Live-yellow)](https://huggingface.co/spaces/M134pra/jailbreak-arena)
 
 **OpenEnv Hackathon submission — PyTorch Foundation × Hugging Face × Scaler.**
 
