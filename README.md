@@ -29,7 +29,6 @@ tags:
 | Deliverable                | Where                                                                                                |
 |----------------------------|------------------------------------------------------------------------------------------------------|
 | 🤗 **Hugging Face Space**  | https://huggingface.co/spaces/M134pra/jailbreak-arena                                          |
-| 📓 **Colab notebook (training)** | [`notebooks/train_grpo_colab.ipynb`](notebooks/train_grpo_colab.ipynb) ([open in Colab](https://colab.research.google.com/github/GHPRNV/jailbreak-arena/blob/main/notebooks/train_grpo_colab.ipynb)) |
 | 💻 **Code repository**     | https://github.com/GHPRNV/jailbreak-arena                                                      |
 | 📝 **HF blog writeup**     | [`docs/BLOG.md`](docs/BLOG.md)                                                                       |
 | 🎥 **YouTube video**       | https://youtu.be/YOUR_VIDEO_ID  (script: [`docs/VIDEO_SCRIPT.md`](docs/VIDEO_SCRIPT.md))            |
@@ -44,7 +43,6 @@ What it's NOT:     a chess / snake / tic-tac-toe / grid-world clone
 
 ## 30-second demo (the plot judges screenshot)
 
-![Before vs after training](plots/before_after_demo.png)
 
 > **Left**: held-out jailbreaks succeed against the untrained Qwen2.5-0.5B baseline — but plummet after GRPO training on JailbreakArena.
 > **Right**: the trained model is *also* less likely to over-refuse benign on-topic questions (the anti-gaming clause works).
