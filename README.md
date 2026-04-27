@@ -49,15 +49,6 @@ What it's NOT:     a chess / snake / tic-tac-toe / grid-world clone
 >
 > Real run: see [`notebooks/train_grpo_colab.ipynb`](notebooks/train_grpo_colab.ipynb) — open in Colab, click "Run all", get this plot in ~45 min on a free T4. The placeholder plot above is overwritten by the notebook with the real-data version.
 
-### Training curves
-
-| Loss | Episode reward |
-|------|----------------|
-| ![Loss](plots/loss.png) | ![Reward](plots/reward.png) |
-
-| Held-out attack success rate | |
-|------|----------------|
-| ![Attack success rate](plots/attack_success_rate.png) | |
 
 ---
 
